@@ -1,6 +1,6 @@
 # Bayes classification concept check
 
-A 20-question formative quiz for the MSc Machine Learning chapter on statistical classification, Bayesian decision theory and Multinomial Naive Bayes.
+A 20-question formative quiz for the MSc Machine Learning chapter on statistical classification, binary metrics, class imbalance, ROC AUC, Bayesian decision theory and Multinomial Naive Bayes.
 
 The appearance and interactions follow the existing [MLP quiz](https://alexbernardino.github.io/mlp-quiz/) and [CNN/Transformer quiz](https://alexbernardino.github.io/cnn-transformer-quiz/): a learning-path sidebar, four answer choices, immediate explanations, short “Check it” exercises, progress and score, a section summary, answer review and restart. Each explanation also lists the relevant lecture-slide titles.
 
@@ -8,15 +8,17 @@ The appearance and interactions follow the existing [MLP quiz](https://alexberna
 
 | Questions | Section | Main topics |
 |---|---|---|
-| 1–5 | Classification & error | Discriminant scores, decision regions, confusion matrices, class priors and threshold errors |
-| 6–11 | Bayes decisions & risk | Bayes' rule, MAP, conditional versus overall error, unequal loss, expected risk and pointwise minimization |
-| 12–20 | Multinomial Naive Bayes | Tokens versus counts, length assumptions, parameter estimation, multinomial coefficient, log scores, smoothing and email classification |
+| 1–7 | Classification & metrics | Discriminants, confusion matrices, precision, recall, specificity, class priors, imbalance, F1 and balanced accuracy |
+| 8–13 | Bayes decisions & risk | Bayes' rule, MAP, unequal loss, expected risk, ROC AUC and deferred threshold selection |
+| 14–20 | Multinomial Naive Bayes | Tokens versus counts, length assumptions, parameter estimation, multinomial coefficient, log scores, smoothing and email classification |
+
+The final-chapter revision replaces six earlier questions while keeping the total at 20. New questions 3, 4, 6, 7, 12 and 13 cover the binary metrics, imbalance and ROC AUC slides. The instructor guide and answer key match this revision.
 
 Each question has one best answer. Correct answers are balanced across A–D. The quiz combines short calculations with conceptual questions. The longer Gaussian, binomial and exponential derivations are left for the lecture exercises.
 
 Notation follows the chapter: x is the document's token sequence; z is its count vector; k indexes classes; i indexes vocabulary words; t indexes token positions. The email model conditions on observed document length, with the same length distribution in every class.
 
-The question bank is based on the illustrated chapter prepared on 2 November 2026. Slide references use titles so reordering the course does not invalidate them.
+The question bank follows the final `7_Data_Classification.tex`, including the Binary Classification Metrics, Imbalanced Classes and ROC AUC slides. Slide references use exact titles so reordering the course does not invalidate them.
 
 ## Preview locally
 
@@ -32,7 +34,20 @@ The published quiz is a static site. It requires no build, package installation,
 
 ## Publish in your bayes-quiz repository
 
-Your repository is [alexbernardino/bayes-quiz](https://github.com/alexbernardino/bayes-quiz). It was empty when this quiz was prepared. The following steps publish the quiz there.
+Your repository is [alexbernardino/bayes-quiz](https://github.com/alexbernardino/bayes-quiz).
+
+### Update the existing repository
+
+From this repository folder, review and publish the local update:
+
+```sh
+git diff --stat
+git add questions.js quiz.js index.html QUESTION_GUIDE.md README.md tests
+git commit -m "Update quiz with binary metrics and ROC AUC"
+git push origin main
+```
+
+These changes do not require a new Pages configuration. If Pages already deploys from `main` and `/(root)`, the push uses that existing configuration. The first-time publishing instructions follow below.
 
 ### Option 1: upload through GitHub
 

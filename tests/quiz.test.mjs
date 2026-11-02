@@ -76,7 +76,7 @@ test("question bank contains 20 complete, distinct, single-answer questions", ()
   });
 });
 
-test("answer positions are balanced and sections follow the chapter's 5/6/9 progression", () => {
+test("answer positions are balanced and sections follow the chapter's 7/6/7 progression", () => {
   const positions = [0, 0, 0, 0];
   const sections = new Map();
   for (const question of questions) {
@@ -85,14 +85,14 @@ test("answer positions are balanced and sections follow the chapter's 5/6/9 prog
   }
   assert.deepEqual(positions, [5, 5, 5, 5]);
   assert.deepEqual([...sections], [
-    ["Classification & error", 5],
+    ["Classification & metrics", 7],
     ["Bayes decisions & risk", 6],
-    ["Multinomial Naive Bayes", 9]
+    ["Multinomial Naive Bayes", 7]
   ]);
   assert.deepEqual(questions.map(question => question.section), [
-    ...Array(5).fill("Classification & error"),
+    ...Array(7).fill("Classification & metrics"),
     ...Array(6).fill("Bayes decisions & risk"),
-    ...Array(9).fill("Multinomial Naive Bayes")
+    ...Array(7).fill("Multinomial Naive Bayes")
   ]);
 });
 
@@ -181,14 +181,14 @@ test("incorrect answer is marked separately from the correct answer and earns ze
   assert.match(quiz.html, /0 points/);
 });
 
-test("all correct answers yield 20/20 and section totals of 5/5, 6/6 and 9/9", () => {
+test("all correct answers yield 20/20 and section totals of 7/7, 6/6 and 7/7", () => {
   const quiz = openQuiz();
   finish(quiz);
   assert.match(quiz.html, /20 out of 20 correct/);
   assert.match(quiz.html, /<span>20\/20<\/span>/);
-  assert.match(quiz.html, /Classification &amp; error<\/span><strong>5 \/ 5/);
+  assert.match(quiz.html, /Classification &amp; metrics<\/span><strong>7 \/ 7/);
   assert.match(quiz.html, /Bayes decisions &amp; risk<\/span><strong>6 \/ 6/);
-  assert.match(quiz.html, /Multinomial Naive Bayes<\/span><strong>9 \/ 9/);
+  assert.match(quiz.html, /Multinomial Naive Bayes<\/span><strong>7 \/ 7/);
   assert.equal(quiz.focusHistory.at(-1), "#results-title");
 });
 
@@ -197,9 +197,9 @@ test("all incorrect answers yield 0/20 without losing section totals", () => {
   finish(quiz, question => (question.answer + 1) % 4);
   assert.match(quiz.html, /0 out of 20 correct/);
   assert.match(quiz.html, /<span>0\/20<\/span>/);
-  assert.match(quiz.html, /Classification &amp; error<\/span><strong>0 \/ 5/);
+  assert.match(quiz.html, /Classification &amp; metrics<\/span><strong>0 \/ 7/);
   assert.match(quiz.html, /Bayes decisions &amp; risk<\/span><strong>0 \/ 6/);
-  assert.match(quiz.html, /Multinomial Naive Bayes<\/span><strong>0 \/ 9/);
+  assert.match(quiz.html, /Multinomial Naive Bayes<\/span><strong>0 \/ 7/);
 });
 
 test("mixed answers produce independent section scores and the last answer is required", () => {
@@ -216,9 +216,9 @@ test("mixed answers produce independent section scores and the last answer is re
     quiz.action("next");
   });
   assert.match(quiz.html, /10 out of 20 correct/);
-  assert.match(quiz.html, /Classification &amp; error<\/span><strong>3 \/ 5/);
+  assert.match(quiz.html, /Classification &amp; metrics<\/span><strong>4 \/ 7/);
   assert.match(quiz.html, /Bayes decisions &amp; risk<\/span><strong>3 \/ 6/);
-  assert.match(quiz.html, /Multinomial Naive Bayes<\/span><strong>4 \/ 9/);
+  assert.match(quiz.html, /Multinomial Naive Bayes<\/span><strong>3 \/ 7/);
 });
 
 test("review preserves responses and restart resets answers, score and navigation", () => {

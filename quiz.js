@@ -11,9 +11,21 @@ function score() {
   return answers.reduce((total, choice, index) => total + Number(choice === questions[index].answer), 0);
 }
 
-function visual(section) {
+function visual(question) {
+  const section = question.section;
   const shell = (label, content) => `<svg class="mini-visual" viewBox="0 0 240 170" role="img" aria-label="${label}"><rect width="240" height="170" fill="#f4f1e8"/>${content}</svg>`;
-  if (section === "Classification & error") {
+  if (question.slides[0] === "ROC AUC: Evaluation Before Choosing a Threshold") {
+    return shell("Illustrative ROC curve with shaded area, recall on the vertical axis and false positive rate on the horizontal axis", `
+      <text x="120" y="19" text-anchor="middle">Across thresholds</text>
+      <path d="M36 135Q124 34 212 34V135Z" fill="#dce5f8"/>
+      <path d="M36 28V135H220" fill="none" stroke="#697183"/>
+      <path d="M36 135L212 34" fill="none" stroke="#697183" stroke-dasharray="4 3"/>
+      <path d="M36 135Q124 34 212 34" fill="none" stroke="#315fc7" stroke-width="2.5"/>
+      <circle cx="124" cy="59.25" r="4" fill="#bc7639"/>
+      <text x="13" y="88" text-anchor="middle" transform="rotate(-90 13 88)">Recall</text>
+      <text x="124" y="156" text-anchor="middle">False positive rate</text>`);
+  }
+  if (section === "Classification & metrics") {
     return shell("Schematic feature space with two decision regions and a boundary", `
       <path d="M32 137V30H212Z" fill="#dce5f8"/>
       <path d="M32 137H212V30Z" fill="#f5e6d1"/>
@@ -56,10 +68,10 @@ function renderQuestion() {
       <div class="rail-note"><p>Answer first, then read the explanation. Your responses stay in this browser tab; nothing is submitted.</p></div>
     </aside>
     <section class="question-stage" aria-label="Quiz question">
-      <p class="setup-note"><strong>Chapter scope:</strong> Classification, Bayesian decisions and Multinomial Naïve Bayes. Use the assumptions stated in each question. Choose one best answer, then check the explanation.</p>
+      <p class="setup-note"><strong>Chapter scope:</strong> Classification metrics, Bayesian decisions, ROC AUC and Multinomial Naïve Bayes. Use the assumptions stated in each question. Choose one best answer, then check the explanation.</p>
       <div class="progress-row"><span>Question ${current + 1} of ${questions.length}</span><div class="progress-track" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="${questions.length}" aria-valuenow="${current + 1}"><div style="width:${((current + 1) / questions.length) * 100}%"></div></div><strong>${score()} points</strong></div>
       <article class="question-card">
-        <div class="question-top"><div><p class="question-label">${escapeHtml(q.category)}</p><h2 id="question-title" tabindex="-1">${formatMathText(q.prompt)}</h2></div>${visual(q.section)}</div>
+        <div class="question-top"><div><p class="question-label">${escapeHtml(q.category)}</p><h2 id="question-title" tabindex="-1">${formatMathText(q.prompt)}</h2></div>${visual(q)}</div>
         <div class="answers" role="group" aria-label="Answer choices">${q.options.map((option, index) => {
           const status = answered ? (index === q.answer ? "answer-correct" : index === choice ? "answer-wrong" : "") : "";
           const mark = answered && index === q.answer ? "✓" : answered && index === choice ? "×" : String.fromCharCode(65 + index);
@@ -83,7 +95,7 @@ function renderResults() {
     <p class="eyebrow">Quiz complete</p>
     <div class="score-ring" style="--score:${(total / questions.length) * 360}deg"><span>${total}/${questions.length}</span></div>
     <h2 id="results-title" tabindex="-1">${total} out of ${questions.length} correct</h2>
-    <p>Review the explanations and short calculations to connect class probabilities, error costs and word-count evidence.</p>
+    <p>Review the explanations to connect classification metrics, score ranking, error costs and word-count evidence.</p>
     <ul class="section-results">${summary}</ul>
     <div class="result-actions"><button type="button" class="secondary" data-action="review">Review answers</button><button type="button" class="primary" data-action="restart">Restart quiz</button></div>
   </section>`;

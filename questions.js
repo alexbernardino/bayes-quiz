@@ -1,8 +1,8 @@
-// Question bank for the illustrated Statistical Classification / Bayes chapter.
+// Question bank for the final Statistical Classification / Bayes chapter.
 // answer is zero-based; explanations and activities are shown after submission.
 export const questions = [
   {
-    section: 'Classification & error',
+    section: 'Classification & metrics',
     category: 'Concept',
     prompt: 'A classifier predicts the class with the largest discriminant score f_k(x). Which statement is correct?',
     options: [
@@ -13,26 +13,11 @@ export const questions = [
     ],
     answer: 2,
     explanation: 'Discriminant functions assign comparable scores to classes. The rule chooses an index with the largest score, using a specified rule for ties. Posterior probabilities are one possible choice of scores, but arbitrary real-valued scores can also define a classifier.',
-    activity: 'Add the same constant to every class score. Does the prediction change? Answer: no, because the ordering is unchanged.',
-    slides: ['Discriminant functions', 'Classifier design']
+    activity: 'Can the indicator of each decision region be a discriminant score? Answer: yes. If the regions form a partition, exactly one score is 1 and all the others are 0, selecting that region’s class.',
+    slides: ['Discriminant functions', 'Classifier design', 'Decision regions and decision boundary']
   },
   {
-    section: 'Classification & error',
-    category: 'Calculation',
-    prompt: 'Let f_0(x) = x_1 + x_2 and f_1(x) = 1. Break ties in favour of class 0. Which description gives the class-0 decision region and the prediction at x = (0.46, 0.67)?',
-    options: [
-      'Region x_1 + x_2 ≥ 1; prediction 0.',
-      'Region x_1 + x_2 ≤ 1; prediction 1.',
-      'Region x_1 + x_2 > 1; prediction 0.',
-      'Region x_1 + x_2 ≥ 1; prediction 1.'
-    ],
-    answer: 0,
-    explanation: 'Class 0 wins when f_0(x) ≥ f_1(x), including equality because of the tie rule. Thus its region is x_1 + x_2 ≥ 1, with boundary x_1 + x_2 = 1. At the given point, f_0 = 1.13 > 1, so the prediction is 0, regardless of the point’s true class.',
-    activity: 'Classify x = (0.4, 0.6). Answer: class 0, because the scores tie and the stated tie rule applies.',
-    slides: ['Discriminant functions', 'Decision regions and decision boundary']
-  },
-  {
-    section: 'Classification & error',
+    section: 'Classification & metrics',
     category: 'Calculation',
     prompt: 'A confusion-count matrix has true classes in rows and predicted classes in columns: [[4, 0], [1, 2]]. What are the empirical overall error and P̂(predicted 0 | true 1), respectively?',
     options: [
@@ -47,7 +32,37 @@ export const questions = [
     slides: ['Confusion Matrix and Probability of Error', 'How to compute the confusion matrix']
   },
   {
-    section: 'Classification & error',
+    section: 'Classification & metrics',
+    category: 'Calculation',
+    prompt: 'In the fish example, class 1 (swordfish) is positive. With true classes in rows and predictions in columns, the count matrix is [[4, 0], [1, 2]]. What are precision, recall and specificity?',
+    options: [
+      'Precision = 1; recall = 2/3; specificity = 1.',
+      'Precision = 2/3; recall = 1; specificity = 1.',
+      'Precision = 1; recall = 1; specificity = 2/3.',
+      'Precision = 6/7; recall = 2/3; specificity = 4/7.'
+    ],
+    answer: 0,
+    explanation: 'The entries give TN = 4, FP = 0, FN = 1 and TP = 2. Precision = TP/(TP + FP) = 1, recall = TP/(TP + FN) = 2/3, and specificity = TN/(TN + FP) = 1. The missed swordfish is a false negative. Perfect precision means that every predicted positive is correct; it does not mean that every actual positive was detected.',
+    activity: 'What is the false positive rate? Answer: FPR = FP/(FP + TN) = 0. There is nevertheless one false negative.',
+    slides: ['Binary Classification Metrics', 'Confusion Matrix and Probability of Error']
+  },
+  {
+    section: 'Classification & metrics',
+    category: 'Concept',
+    prompt: 'For a binary classifier with both classes present, which pair of identities is correct?',
+    options: [
+      'TPR = recall; FPR = 1 − specificity.',
+      'TPR = precision; FPR = 1 − specificity.',
+      'TPR = recall; FPR = 1 − precision.',
+      'TPR = specificity; FPR = 1 − recall.'
+    ],
+    answer: 0,
+    explanation: 'TPR = TP/(TP + FN) is recall, also called sensitivity: the fraction of actual positives detected. FPR = FP/(FP + TN) is the fraction of actual negatives incorrectly predicted positive. It is 1 − specificity because specificity = TN/(TN + FP). Precision instead divides TP by the number of predicted positives, TP + FP. A ROC curve plots TPR vertically against FPR horizontally.',
+    activity: 'If recall is 0.8 and specificity is 0.9, locate the ROC point. Answer: (FPR, TPR) = (0.1, 0.8), not (0.9, 0.8).',
+    slides: ['Binary Classification Metrics', 'ROC AUC: Evaluation Before Choosing a Threshold']
+  },
+  {
+    section: 'Classification & metrics',
     category: 'Calculation',
     prompt: 'A classifier has P(predicted 1 | true 0) = 0.10 and P(predicted 0 | true 1) = 0.40. With class priors P_0 = 0.80 and P_1 = 0.20, what is its overall probability of error?',
     options: [
@@ -57,24 +72,39 @@ export const questions = [
       '0.34.'
     ],
     answer: 1,
-    explanation: 'Weight each within-class error by that class’s prior: P_{error} = 0.80 × 0.10 + 0.20 × 0.40 = 0.16. The unweighted average 0.25 gives equal importance to the two classes, but is not the overall error for these priors.',
+    explanation: 'Weight each within-class error by that class’s prior: P_{error} = 0.80 × 0.10 + 0.20 × 0.40 = 0.16. The unweighted average 0.25 gives equal importance to the two classes, but is not the overall error for these priors. With class 1 positive, these conditional errors are FPR = 0.10 and FNR = 0.40. Balanced accuracy is (0.90 + 0.60)/2 = 0.75, whereas ordinary accuracy is 1 − 0.16 = 0.84.',
     activity: 'Keep the same conditional errors but use equal priors. Answer: the overall error becomes 0.5 × 0.10 + 0.5 × 0.40 = 0.25.',
-    slides: ['Confusion Matrix and Probability of Error', 'How to compute the confusion matrix']
+    slides: ['Confusion Matrix and Probability of Error', 'How to compute the confusion matrix', 'Imbalanced Classes: Accuracy Can Hide Missed Positives']
   },
   {
-    section: 'Classification & error',
+    section: 'Classification & metrics',
     category: 'Calculation',
-    prompt: 'For x ∈ [0, 1], let p(x | 0) = 1, p(x | 1) = 2x and P_0 = P_1 = 1/2. Predict 0 for x < T and 1 otherwise. Which threshold minimizes error, and what is that error?',
+    prompt: 'A dataset contains 99 negatives and 1 positive. A classifier always predicts negative. What are its accuracy, F1-score and balanced accuracy?',
     options: [
-      'T = 1/2; error = 3/8.',
-      'T = 1/2; error = 1/4.',
-      'T = 1; error = 0.',
-      'T = 0; error = 1/2.'
+      'Accuracy = 99%; F1 = 0; balanced accuracy = 50%.',
+      'Accuracy = 99%; F1 = 0.99; balanced accuracy = 99%.',
+      'Accuracy = 1%; F1 = 0; balanced accuracy = 50%.',
+      'Accuracy = 99%; F1 is undefined; balanced accuracy = 99%.'
     ],
     answer: 0,
-    explanation: 'The two error probabilities are P_{01} = (1/2)(1 − T) and P_{10} = (1/2)T². Their sum has derivative −1/2 + T and positive second derivative, so its minimum is at T = 1/2. The minimum is 1/4 + 1/8 = 3/8. Overlapping class distributions prevent zero error.',
-    activity: 'Compare T = 0.2 and T = 0.8. Answer: both give error 0.42, although they trade the two kinds of error differently.',
-    slides: ['Example: Evaluating a Threshold Classifier', 'Moving the Threshold Trades One Error for Another']
+    explanation: 'Here TN = 99, FP = 0, FN = 1 and TP = 0. Accuracy is 99/100 even though recall is zero. The count formula gives F1 = 2TP/(2TP + FP + FN) = 0/1 = 0. Specificity is 1, so balanced accuracy = (recall + specificity)/2 = 50%. Precision is mathematically undefined because TP + FP = 0, but the count formula for F1 has a nonzero denominator and gives zero.',
+    activity: 'Replace the 99 negatives with 999 negatives, still predicting every case as negative. Answer: accuracy rises to 99.9%, while recall and F1 remain 0 and balanced accuracy remains 50%.',
+    slides: ['Imbalanced Classes: Accuracy Can Hide Missed Positives']
+  },
+  {
+    section: 'Classification & metrics',
+    category: 'Calculation',
+    prompt: 'A binary classifier has TN = 90, FP = 10, FN = 10 and TP = 10. What are its F1-score and balanced accuracy?',
+    options: [
+      'F1 = 0.70; balanced accuracy = 0.50.',
+      'F1 = 0.50; balanced accuracy = 0.70.',
+      'F1 = 0.50; balanced accuracy ≈ 0.833.',
+      'F1 = 0.50; balanced accuracy = 0.30.'
+    ],
+    answer: 1,
+    explanation: 'Precision and recall are both 10/20 = 0.5, so their harmonic mean is F1 = 0.5. Equivalently, F1 = 2TP/(2TP + FP + FN) = 20/40. Specificity is 90/100 = 0.9, giving balanced accuracy = (0.5 + 0.9)/2 = 0.7. Ordinary accuracy is 100/120 ≈ 0.833. F1 focuses on the positive class and does not use TN; balanced accuracy gives equal weight to the recall of each class.',
+    activity: 'Exchange the positive and negative class labels. Answer: balanced accuracy stays 0.70, while F1 becomes 2 × 90/(2 × 90 + 10 + 10) = 0.90. The choice of positive class matters for F1.',
+    slides: ['Imbalanced Classes: Accuracy Can Hide Missed Positives', 'Binary Classification Metrics']
   },
   {
     section: 'Bayes decisions & risk',
@@ -109,21 +139,6 @@ export const questions = [
   {
     section: 'Bayes decisions & risk',
     category: 'Calculation',
-    prompt: 'For x = 1, 2, 3, 4, the joint probabilities are p(x, y = 0) = (0.12, 0.08, 0.04, 0.16) and p(x, y = 1) = (0.12, 0.18, 0.24, 0.06). What is the minimum overall probability of error under 0–1 loss?',
-    options: [
-      '0.12.',
-      '0.30.',
-      '0.70.',
-      '0.50.'
-    ],
-    answer: 1,
-    explanation: 'At each x, predict a class with the larger joint probability. The error contribution is the smaller joint probability. Summing these contributions gives 0.12 + 0.08 + 0.04 + 0.06 = 0.30. At x = 1 the joint probabilities tie, so either class gives the same error contribution. A fixed tie rule makes the classifier fully specified.',
-    activity: 'Find the predictions at x = 2, 3 and 4. Answer: classes 1, 1 and 0, respectively.',
-    slides: ['Exercise 1: A Discrete Bayes Classifier', 'Bayes Classifier: Largest Posterior, Smallest Error']
-  },
-  {
-    section: 'Bayes decisions & risk',
-    category: 'Calculation',
     prompt: 'Rows of L are true classes and columns are decisions. Let L = [[0, 1], [5, 0]] and P(y = 1 | x) = 0.20. Which decision minimizes conditional expected loss?',
     options: [
       'Choose 0, because its posterior is 0.80.',
@@ -147,24 +162,39 @@ export const questions = [
       '0.87.'
     ],
     answer: 0,
-    explanation: 'Risk is the sum of each joint probability multiplied by its corresponding loss: R = Σ_{i,j} L_{ij}P_{ij} = 1 × 0.08 + 5 × 0.05 = 0.33. The probability of error is only 0.08 + 0.05 = 0.13. They differ because one type of error costs five times as much as the other.',
+    explanation: 'Risk is the sum of each joint probability multiplied by its corresponding loss: R = Σ_{i,j} L_{ij}P_{ij} = 1 × 0.08 + 5 × 0.05 = 0.33. The probability of error is only 0.08 + 0.05 = 0.13. They differ because one type of error costs five times as much as the other. Minimizing conditional cost at every observation minimizes its integral because the density weights are nonnegative.',
     activity: 'Replace L with 0–1 loss. Answer: the risk becomes the probability of error, 0.13.',
     slides: ['Why Pointwise Cost Minimization Minimizes Total Risk', 'Loss Functions: When Errors Have Different Costs']
   },
   {
     section: 'Bayes decisions & risk',
     category: 'Concept',
-    prompt: 'Why does choosing a decision with minimum conditional cost c_j(x) at every observation minimize the total risk R = ∫ c_{ŷ(x)}(x)p(x) dx?',
+    prompt: 'A model produces scores, but its user will choose error costs and a decision threshold later. Why is ROC AUC useful for evaluation now?',
     options: [
-      'All observations have the same probability density.',
-      'Every class must have the same prior probability.',
-      'The weights p(x) are nonnegative, so pointwise smaller conditional costs cannot increase their weighted integral.',
-      'Conditional cost is always the same as conditional probability of error.'
+      'It summarizes ranking performance across thresholds without requiring one threshold to be chosen.',
+      'It identifies one threshold that is optimal for every possible loss matrix.',
+      'A larger AUC guarantees lower risk for every possible choice of error costs.',
+      'It recovers the full score-based ROC curve from a single confusion matrix.'
+    ],
+    answer: 0,
+    explanation: 'ROC AUC is the area under the curve of recall (TPR) against false positive rate (FPR) as the threshold varies. It summarizes score ranking without selecting one operating threshold. The random-ranking reference has AUC 0.5 and perfect ranking has AUC 1. The user still chooses the final threshold using the application’s loss; a larger AUC does not guarantee smaller risk for every loss matrix.',
+    activity: 'Does changing only the selected threshold change the ROC AUC of fixed scores on fixed labelled data? Answer: no. It changes the confusion matrix and the operating point, not the full score-based ROC curve.',
+    slides: ['ROC AUC: Evaluation Before Choosing a Threshold', 'Why Pointwise Cost Minimization Minimizes Total Risk']
+  },
+  {
+    section: 'Bayes decisions & risk',
+    category: 'Calculation',
+    prompt: 'In the chapter’s threshold example, FPR = 1 − T and TPR = 1 − T² for T between 0 and 1. What is the ROC AUC?',
+    options: [
+      '1/2.',
+      '3/8.',
+      '2/3.',
+      '3/4.'
     ],
     answer: 2,
-    explanation: 'For the unconstrained classification rules considered here, decisions can be chosen separately at each x. A pointwise minimum c_j(x) is no larger than the conditional cost of any other decision. Multiplying by p(x) ≥ 0 and integrating preserves that inequality. This argument allows unequal class priors and general loss matrices; only under 0–1 loss does conditional cost equal conditional error.',
-    activity: 'What if two actions tie at some x? Answer: either action gives the same conditional cost there, and therefore the same contribution to total risk.',
-    slides: ['Why Pointwise Cost Minimization Minimizes Total Risk']
+    explanation: 'Write u = FPR = 1 − T, so T = 1 − u. Then TPR = 1 − (1 − u)² = 2u − u². The area from u = 0 to u = 1 is AUC = [u² − u³/3] evaluated from 0 to 1 = 2/3. At T = 1/2 the ROC point is (1/2, 3/4); that one point does not determine the area. The minimum error 3/8 under equal priors is a different quantity.',
+    activity: 'Raise T from 0.5 to 0.8. Answer: the ROC point moves from (0.5, 0.75) to (0.2, 0.36). FPR falls, but recall also falls, so the false-negative rate rises.',
+    slides: ['ROC AUC: Evaluation Before Choosing a Threshold', 'Example: Evaluating a Threshold Classifier', 'Moving the Threshold Trades One Error for Another']
   },
   {
     section: 'Multinomial Naive Bayes',
@@ -177,24 +207,9 @@ export const questions = [
       'Each word can appear at most once, so every z_i is 0 or 1.'
     ],
     answer: 1,
-    explanation: 'Conditional on class and length, tokens are independent draws from the same categorical word distribution. The parameters satisfy θ_{i,k} ≥ 0 and Σ_i θ_{i,k} = 1. Counts summarize repeated tokens, but their fixed total Σ_i z_i = T couples them. The multinomial count likelihood is not a product of independent count marginals.',
+    explanation: 'Conditional on class and length, tokens are independent draws from the same categorical word distribution. The parameters satisfy θ_{i,k} ≥ 0 and Σ_i θ_{i,k} = 1. Counts summarize repeated tokens, but their fixed total Σ_i z_i = T couples them. The multinomial count likelihood is not a product of independent count marginals. The chapter assumes the same document-length distribution in every class and word probabilities independent of length. The common length factor therefore cancels from class comparisons; this does not require every possible length to be equally probable.',
     activity: 'For vocabulary (win, money, hello), convert “win money win” to counts. Answer: z = (2, 1, 0). Shuffling these tokens preserves z.',
     slides: ['Multinomial Naive Bayes: Problem and Assumptions', 'Word Probabilities and Their Estimation', 'Conditional Independence Leads to Word Counts']
-  },
-  {
-    section: 'Multinomial Naive Bayes',
-    category: 'Concept',
-    prompt: 'The chapter assumes document length has the same distribution in every class and then conditions on the observed length implicitly. Why can document length be omitted from the class comparison?',
-    options: [
-      'The factor P(T | y = k) is common to all classes, so it cancels for the observed document.',
-      'Every possible document length must have the same probability.',
-      'A fixed observed length makes P(T | y = k) equal across classes without any model assumption.',
-      'Conditioning on length makes all classes equally probable.'
-    ],
-    answer: 0,
-    explanation: 'The assumption is P(T | y = k) = g(T), with the same length distribution g for every class. For an observed length with positive probability, this common factor cancels from Bayes comparisons and P(y = k | T) = P(y = k). The chapter also assumes word probabilities do not depend on length. Equal length distributions across classes do not mean that all possible lengths are equally probable. If length distributions differed by class, length could provide class evidence.',
-    activity: 'Suppose length likelihoods satisfy P(T | spam)/P(T | ham) = 2. What extra factor enters the spam-to-ham odds? Answer: 2; it can no longer be dropped.',
-    slides: ['Multinomial Naive Bayes: Problem and Assumptions']
   },
   {
     section: 'Multinomial Naive Bayes',
@@ -283,22 +298,7 @@ export const questions = [
     ],
     answer: 1,
     explanation: 'Using the ordered token sequence, the prior-weighted scores are a_{spam} = (1/2)(3/8)(4/8) = 3/32 = 6/64 and a_{ham} = (1/2)(1/8)(2/8) = 1/64. Normalize them: P(spam | email) = (6/64)/(7/64) = 6/7. Predict spam. In the count representation the multinomial coefficient is 2 for both classes, so it cancels from the same posterior calculation. The unnormalized score 3/32 is not a posterior.',
-    activity: 'What are the spam-to-ham posterior odds? Answer: 6. The spam log score exceeds the ham log score by log 6.',
-    slides: ['Worked Mini-Example: Classifying ``win money\'\'', 'Multinomial Naive Bayes: Decision Rule']
-  },
-  {
-    section: 'Multinomial Naive Bayes',
-    category: 'Calculation',
-    prompt: 'For “win money”, the model’s spam-to-ham odds are 6. Each added “hello” has word-probability ratio θ_{hello,spam}/θ_{hello,ham} = 1/5. After adding two “hello” tokens, what are the odds and the 0–1-loss prediction?',
-    options: [
-      'Odds 6/25; predict ham.',
-      'Odds 6/5; predict spam.',
-      'Odds 6/25; predict spam.',
-      'Odds 150; predict spam.'
-    ],
-    answer: 0,
-    explanation: 'Repeated tokens contribute repeated evidence: the new odds are 6 × (1/5)² = 6/25 < 1, so ham is preferred. The model spam posterior is (6/25)/(1 + 6/25) = 6/31. In log space, two added “hello” tokens subtract 2 log 5 from the spam-to-ham log odds. The class-independent length and multinomial factors do not affect this class comparison.',
-    activity: 'Add only one “hello” instead. Answer: odds 6/5, spam posterior 6/11, and the prediction remains spam.',
-    slides: ['One More Word: How Does the Evidence Change?', 'Multinomial Naive Bayes: Decision Rule']
+    activity: 'Append one “hello”, whose spam-to-ham word-probability ratio is 1/5. Answer: the odds change from 6 to 6/5, giving spam posterior 6/11; spam is still preferred under 0–1 loss.',
+    slides: ['Worked Mini-Example: Classifying ``win money\'\'', 'Multinomial Naive Bayes: Decision Rule', 'One More Word: How Does the Evidence Change?']
   }
 ];
